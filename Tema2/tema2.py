@@ -11,6 +11,8 @@ A = [[1.5, 3, 3],
     [2, 6.5, 14],
     [1, 3, 8]]
 
+precision = 10**(-10)
+
 b = [1, 2, 3]
 
 matrix_dim = 3
@@ -51,7 +53,11 @@ def getColumnElement(i, j, A, A_desc):
         else:
             sum += A_desc[i][t] * A_desc[t][j]
 
-    u_element = (A[i][j] - sum) / A_desc[i][i]
+    if math.fabs(A_desc[i][i] > precision):
+        u_element = (A[i][j] - sum) / A_desc[i][i]
+    else:
+        print("Impartire la aproape 0")
+        return
 
     return u_element
 
@@ -95,6 +101,7 @@ def computeDet(A, matrix_dim):
     for i in range(matrix_dim):
         det = det * A[i][i]
 
+    return det
 
 def getLsolution(A_desc, b, matrix_dim):
     Lsol = [0] * matrix_dim
@@ -103,7 +110,11 @@ def getLsolution(A_desc, b, matrix_dim):
         known_sum = 0
         for j in range(i):
             known_sum += A_desc[i][j] * Lsol[j]
-        Lsol[i] = (b[i] - known_sum) / A_desc[i][i]
+
+        if math.fabs(A_desc[i][i] > precision):
+            Lsol[i] = (b[i] - known_sum) / A_desc[i][i]
+        else:
+            print("Impartire aproape la 0")
 
     return Lsol
 
@@ -137,7 +148,6 @@ def compute_norm(A, matrix_dim, sol, result):
             value += A[i][j] * sol[j]
 
         diff_list[i] = value - result[i]
-        print(value)
 
     norm = math.sqrt(sum([x * x for x in diff_list]))
 
@@ -177,6 +187,10 @@ def show_norms(A, b, matrix_dim):
     norm_1 = math.sqrt(sum([x * x for x in norm_1_diff]))
 
     A_inverse = compute_inverse(A)
+
+    print('Inversa: ')
+    print(A_inverse)
+
     A_inverse_mul_b = np.dot(A_inverse, b)
 
     norm_2_diff = [0] * matrix_dim
@@ -190,3 +204,24 @@ def show_norms(A, b, matrix_dim):
     print("Norm 2:", norm_2)
 
 
+def tema2(A, b, matrix_dim):
+    A_desc = computeAdesc(A, matrix_dim)
+    print("Matricea descompusa: ")
+    print_mat(A_desc)
+
+    print("Determinantul: ")
+    print(computeDet(A_desc, matrix_dim))
+
+    computed_solution = solve(A, b, matrix_dim)
+    print("Solutia calculata: ")
+    print(computed_solution)
+
+    norm = check_solution(A, matrix_dim, b)
+    print("Norma: ")
+    print(norm)
+
+    show_norms(A, b, matrix_dim)
+
+
+A, b, matrix_dim = read_matrix("data.txt")
+tema2(A, b, matrix_dim)
