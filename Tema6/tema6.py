@@ -75,18 +75,19 @@ def compute_halley_solution(polinom_info, x, kmax, epsilon):
         first_derivative = get_derivative(polinom_info)
         second_derivative = get_derivative(first_derivative)
 
-        polinom_value = compute_value(polinom_info, xk)
+        polinom_value = compute_value(polinom_info, x)
+        polinom_value_xk = compute_value(polinom_info, xk)
         first_derivative_value = compute_value(first_derivative, x)
         second_derivative_value = compute_value(second_derivative, x)
 
         #print(polinom_value, first_derivative_value, second_derivative_value)
 
-        A = 2 * first_derivative_value * first_derivative_value - polinom_value * second_derivative_value
+        A = 2 * first_derivative_value * first_derivative_value - polinom_value_xk * second_derivative_value
 
         if fabs(A) < epsilon:
             break
 
-        delta = polinom_value * second_derivative_value / A
+        delta = polinom_value * first_derivative_value / A
         x = x - delta
         k = k + 1
 
@@ -100,7 +101,7 @@ def find_solutions(polinom_info):
 
     R = (fabs(a0) + amax) / fabs(a0)
 
-    for i in range(1000):
+    for i in range(100):
         xrandom = random.uniform(-R, R)
         solution = compute_halley_solution(polinom_info, xrandom, 100, 0.000000001)
 
@@ -112,6 +113,7 @@ def find_solutions(polinom_info):
 
             if not is_present:
                 solutions.append(solution)
+                print(xrandom, solution)
 
     if solutions:
         print("Solutiile sunt: {}".format(solutions))
