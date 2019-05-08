@@ -223,5 +223,8 @@ def tema2(A, b, matrix_dim):
     show_norms(A, b, matrix_dim)
 
 
-A, b, matrix_dim = read_matrix("data.txt")
-tema2(A, b, matrix_dim)
+#A, b, matrix_dim = read_matrix("data.txt")
+#tema2(A, b, matrix_dim)
+
+if __name__ == "__main__":
+    print("VSK module for sistem solve")
