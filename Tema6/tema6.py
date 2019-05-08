@@ -113,7 +113,10 @@ def find_solutions(polinom_info):
             if not is_present:
                 solutions.append(solution)
 
-    print(solutions)
+    if solutions:
+        print("Solutiile sunt: {}".format(solutions))
+    else:
+        print("No solutions found!")
 
 
 polinom_info = read_coef_and_powers("polinom.txt")
